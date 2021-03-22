@@ -42,8 +42,9 @@ def predict():
     # # score = result[0][0]
     
     print ("result >>> ",result)
-    # print ("df >>> ",df)
     # print ("data >>> ",data)
+    print ("df >>> ",df)
+    print ("data >>> ",data)
     return jsonify({'result':str(result[0][0])})
 
 

@@ -7,51 +7,36 @@ import numpy as np
 
 from flask import Flask
 from flask import jsonify
-from keras.models import load_model
+# from tensorflow.keras.models import load_model
 import tensorflow as tf
 
 
 app = Flask(__name__)
 
-# model = pickle.load(open('./BalancedModel.pkl','rb'))
-scaler = pickle.load(open('scaler.pkl','rb'))
-model = load_model('model.h5')
+model = pickle.load(open('BalancedModel.pkl','rb'))
+scaler = pickle.load(open('StandardScaler.pkl','rb'))
 
 @app.route('/hello/', methods=['GET', 'POST'])
 def welcome():
     return "Hello World"
 
 
-# @app.before_request
-# def before():
-#     print("This is executed BEFORE each predict request.")
+@app.before_request
+def before():
+    print("This is executed BEFORE each predict request.")
 
 @app.route('/predict/', methods=['GET', 'POST'])
 def predict():
-    dataready = [24,1,39,0,0,0,0,1,0,0,0,0,0,1,0,9000,1,0,0,0,0,0,1,1,1,1]#negative
-    dataready = [24,1,40,1,0,1,0,1,0,1,0,1,0,1,0,14000,1,0,0,0,0,1,12,1,1,1]#positive
-    data = np.array(dataready)
-
-    data = data.reshape(1,-1) #column to row
-
-    df = scaler.transform(data)
-
-    # #del input_features[0:2]
-    result = model.predict_classes([df])
-    #print(result[0])
-    # # score = result[0][0]
-    
-    print ("result >>> ",result)
-    # print ("df >>> ",df)
-    # print ("data >>> ",data)
-    return jsonify({'result':str(result[0][0])})
+    print("model >> ",model)
+    return jsonify({'name':'khattak01',
+                    'address':'Nowshera'})
 
 
 if __name__ == '__main__':
     HOST = '127.0.0.1'
     PORT = 7000     
-    app.run(debug = True , use_reloader=False)
-app.run(host=HOST,port=PORT)
+    # app.run(debug = False , )
+    app.run(host=HOST,port=PORT)
 
 # from flask import Flask, request, render_template, jsonify
 #from tensorflow.keras.models import load_model

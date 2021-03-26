@@ -28,8 +28,8 @@ def welcome():
 
 @app.route('/predict/', methods=['GET', 'POST'])
 def predict():
-    dataready = [24,1,39,0,0,0,0,1,0,0,0,0,0,1,0,9000,1,0,0,0,0,0,1,1,1,1]#negative
-    # dataready = [24,1,40,1,0,1,0,1,0,1,0,1,0,1,0,14000,1,0,0,0,0,1,12,1,1,1]#positive
+    # dataready = [24,1,39,0,0,0,0,1,0,0,0,0,0,1,0,9000,1,0,0,0,0,0,1,1,1,1]#negative
+    dataready = [24,1,40,1,0,1,0,1,0,1,0,1,0,1,0,14000,1,0,0,0,0,1,12,1,1,1]#positive
     data = np.array(dataready)
 
     data = data.reshape(1,-1) #column to row
@@ -45,7 +45,7 @@ def predict():
     print ("result >>> ",result)
     # print ("df >>> ",df)
     # print ("data >>> ",data)
-    return jsonify({'result':str(result[0][0]),"prediction":str(prediction[0][0])})
+    return jsonify({'result':str(result[0][0]),"prediction":str(prediction)})
 
 
 if __name__ == '__main__':

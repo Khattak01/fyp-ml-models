@@ -6,9 +6,8 @@ import numpy as np
 #import random
 #import datetime
 
-# from flask import Flask
-# from flask import jsonify
-from flask import Flask, request, jsonify
+from flask import Flask
+from flask import jsonify
 from keras.models import load_model
 import tensorflow as tf
 
@@ -16,9 +15,8 @@ import tensorflow as tf
 app = Flask(__name__)
 
 # model = pickle.load(open('./BalancedModel.pkl','rb'))
-scaler = pickle.load(open('scaler.pkl', 'rb'))
+scaler = pickle.load(open('scaler.pkl','rb'))
 model = load_model('model.h5')
-
 
 @app.route('/hello/', methods=['GET', 'POST'])
 def welcome():
@@ -31,35 +29,33 @@ def welcome():
 
 @app.route('/predict/', methods=['GET', 'POST'])
 def predict():
-    print(request.get_json())
-    # dataready = [24, 1, 39, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-    #              0, 9000, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1]  # negative
+    print(flash.form.get('data'))
+    dataready = [24,1,39,0,0,0,0,1,0,0,0,0,0,1,0,9000,1,0,0,0,0,0,1,1,1,1]#negative
     # dataready = [24,1,40,1,0,1,0,1,0,1,0,1,0,1,0,14000,1,0,0,0,0,1,12,1,1,1]#positive
-    dataready = request.get_json()
     data = np.array(dataready)
 
-    data = data.reshape(1, -1)  # column to row
+    data = data.reshape(1,-1) #column to row
 
     df = scaler.transform(data)
 
     # #del input_features[0:2]
     result = model.predict_classes([df])
     prediction = model.predict([df])
-    # print(result[0])
+    #print(result[0])
     # # score = result[0][0]
-
-    print("result >>> ", result)
-    print("prediction >>> ", prediction)
+    
+    print ("result >>> ",result)
+    print ("prediction >>> ",prediction)
     # print ("df >>> ",df)
     # print ("data >>> ",data)
-    return jsonify({'result': str(result[0][0]), "prediction": str(prediction[0][0])})
+    return jsonify({'result':str(result[0][0]),"prediction":str(prediction[0][0])})
 
 
 if __name__ == '__main__':
     HOST = '127.0.0.1'
-    PORT = 7000
-    app.run(debug=True, use_reloader=False)
-app.run(host=HOST, port=PORT)
+    PORT = 7000     
+    app.run(debug = True , use_reloader=False)
+app.run(host=HOST,port=PORT)
 
 # from flask import Flask, request, render_template, jsonify
 #from tensorflow.keras.models import load_model
